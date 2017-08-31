@@ -8,7 +8,7 @@
 
 #import "EKEventTool.h"
 
-#define yyyyMMddHHmmss @"yyyy-MM-dd HH:mm:ss"
+#define yyyyMMddHHmm @"yyyy-MM-dd HH:mm"
 #define SavedEKEventsIdenti @"savedEKEventsIdenti"
 
 @interface EKEventTool ()
