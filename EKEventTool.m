@@ -31,25 +31,6 @@
     return eventTool;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)coder
-{
-    self = [super init];
-    if (self) {
-       
-        self.myEventStore = [coder decodeObjectForKey:@"myEventStore"];
-    }
-    return self;
-}
-
-/**
- *  归档协议方法
- */
--(void)encodeWithCoder:(NSCoder *)aCoder{
-   
-    [aCoder encodeObject:self.myEventStore forKey:@"myEventStore"];
-    
-}
-
 
 /**
  *  创建事件
