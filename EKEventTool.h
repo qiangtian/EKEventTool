@@ -18,15 +18,15 @@
 
 
 /**
- 创建日历事件
+// 创建日历事件
 
- @param title 标题
- @param location 地点
- @param startDateStr 开始时间
- @param endDateStr 结束时间
- @param allDay 是否全天
- @param notes 备注
- @param alarmStr 提醒时间
+//  title 标题
+//  location 地点
+//  startDateStr 开始时间
+//  endDateStr 结束时间
+//  allDay 是否全天
+//  notes 备注
+//  alarmStr 提醒时间
  */
 - (void)createEventWithEventModel:(EKEventModel *)eventModel;
 

@@ -8,7 +8,6 @@
 
 #import "EKEventTool.h"
 
-#define yyyyMMddHHmm @"yyyy-MM-dd HH:mm"
 #define SavedEKEventsIdenti @"savedEKEventsIdenti"
 
 @interface EKEventTool ()
@@ -30,7 +29,6 @@
     });
     return eventTool;
 }
-
 
 /**
  *  创建事件
@@ -57,21 +55,17 @@
                         event = [EKEvent eventWithEventStore:self.myEventStore];
                         event.title = eventModel.title;
                         event.location = eventModel.location;
-                        
-                        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
-                        [dateFormatter setDateFormat:yyyyMMddHHmm];
-                        
-                        NSDate *startDate = [dateFormatter dateFromString:eventModel.startDateStr];
-                        NSDate *endDate = [dateFormatter dateFromString:eventModel.endDateStr];
-                        event.startDate = startDate;
-                        event.endDate = endDate;
+                        event.startDate = eventModel.startDate;
+                        event.endDate = eventModel.endDate;
                         event.allDay = eventModel.allDay;
                         event.notes = eventModel.notes;
-                        if (eventModel.alarmStr.length) {
-                            NSInteger alarmTime = [self getAlarmWithStr:eventModel.alarmStr];
-                            if (alarmTime != 0) {
-                                [event addAlarm:[EKAlarm alarmWithRelativeOffset:alarmTime]];
-                            }
+                        
+                        NSInteger alarmTime = [self getAlarmWithStr:eventModel.alarmStr];
+                        if (alarmTime != 0) {
+                            [event addAlarm:[EKAlarm alarmWithRelativeOffset:alarmTime]];
+                        } else {
+                            // 设置提醒时间为 开始时间
+                            [event addAlarm:[EKAlarm alarmWithAbsoluteDate:eventModel.startDate]];
                         }
                         
                         [event setCalendar:[self.myEventStore defaultCalendarForNewEvents]];
@@ -99,8 +93,6 @@
         }];
     }
 }
-
-
 
 /**
  *  删除事件
@@ -162,7 +154,6 @@
  */
 - (void)deleteAllCreatedEvent {
     
-    
     NSMutableArray *savedArr = [[NSUserDefaults standardUserDefaults] objectForKey:SavedEKEventsIdenti];
     
     for (int i = 0; i < savedArr.count; i++) {
@@ -180,15 +171,7 @@
     
     EKEventStore * eventStore = [[EKEventStore alloc]init];
     self.myEventStore =  eventStore;
-
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
-    [dateFormatter setDateFormat:yyyyMMddHHmm];
-    
-    NSDate *startDate = [dateFormatter dateFromString:eventModel.startDateStr];
-    NSDate *endDate = [dateFormatter dateFromString:eventModel.endDateStr];
-    
-    NSPredicate *predicate = [eventStore predicateForEventsWithStartDate:startDate endDate:endDate calendars:@[[eventStore defaultCalendarForNewEvents]]];
-    
+    NSPredicate *predicate = [eventStore predicateForEventsWithStartDate:eventModel.startDate endDate:eventModel.endDate calendars:@[[eventStore defaultCalendarForNewEvents]]];
     NSArray *events = [eventStore eventsMatchingPredicate:predicate];
 
     EKEvent *resultEvent = nil;
@@ -240,9 +223,10 @@
         alarmTime = 60.0 * -60.f;
     } else if ([alarmStr isEqualToString:@"1天前"]) {
         alarmTime = 60.0 * - 60.f * 24;
+    } else {
+        alarmTime = 0;
     }
     return alarmTime;
 }
-
 
 @end
