@@ -1,6 +1,6 @@
 # EKEventTool
 Operating calendar events
-
+需要添加plistPrivacy - Calendars Usage Description
 /**
 这个单例是在项目中用到的功能，创建日历提醒事件到系统日历中，主要是 添加、删除 、和删除所有创建的事件 功能，如果需要使用的
 话，可能需要自己修改。欢迎提出修改和优化意见。大家一起学习。
